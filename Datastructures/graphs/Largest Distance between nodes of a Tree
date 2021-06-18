@@ -1,0 +1,42 @@
+//Largest Distance between nodes of a Tree
+
+
+int bfs(int u,vector<vector<int>>&graph,bool flag){
+    queue<pair<int,int>>q;
+    vector<bool>vis(graph.size(),false);
+    q.push({u,0});  // we initially push the root node
+    int v,d; 
+    while(!q.empty()){
+         v=q.front().first;
+         d=q.front().second;
+        q.pop();
+        vis[v]=true;
+        for(int i:graph[v]){
+            if(!vis[i]){
+            q.push({i,d+1});
+            }
+        }
+    }
+    if(flag==false){
+        return v;   // we use flase for returning the farthest node from root 
+    }
+    else return d; // we use true for returning the max distance from the farthest node to the max dis node
+}
+int Solution::solve(vector<int> &A) {
+    int n=A.size(); int k;
+  vector<vector<int>> graph(n);
+  // creating the graph
+  for(int i=0;i<n;i++){ 
+      if(A[i]!=-1){
+          graph[A[i]].push_back(i);
+          graph[i].push_back(A[i]);
+      }
+      else{
+          k=i;   //root node
+      }
+  }
+  // we need to find the farthest node from the root node by using bfs
+  // farthest node=bfs(k,graph,flase)
+  // Then we use this farthest node as root node inorder to find the farthest node from it by again using bfs
+  return bfs(bfs(k,graph,false),graph,true);
+}
