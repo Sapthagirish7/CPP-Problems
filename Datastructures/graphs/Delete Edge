@@ -1,0 +1,41 @@
+
+//Given a undirected tree with N nodes labeled from 1 to N.
+
+//Each node has a certain weight assigned to it given by an integer array A of size N.
+
+//You need to delete an edge in such a way that Product between sum of weight of nodes in one subtree with sum of weight of nodes in other subtree is maximized.
+
+//Return this maximum possible product modulo 109 + 7.
+
+
+
+
+void dfs(vector<int> adj[],int x,vector<int>&sum,vector<int> &A){
+    
+    sum[x]=A[x-1];    // weight of the node is assigned
+    for(int i:adj[x]){
+        if(sum[i]==0){
+           dfs(adj,i,sum,A);  
+           sum[x]+=sum[i]; 
+        }
+    }
+}
+int Solution::deleteEdge(vector<int> &A, vector<vector<int> > &B) {
+    vector<int> adj[A.size()+1];
+    int ans=INT_MIN;
+    int mod=1e9+7;
+    for(int i=0;i<B.size();i++){
+        adj[B[i][0]].push_back(B[i][1]);
+        adj[B[i][1]].push_back(B[i][0]);
+    }
+    vector<int> sum(A.size()+1,0);
+    dfs(adj,1,sum,A);
+    for(auto v:B){
+        long long sum1,sum2;
+        sum1=min(sum[v[0]],sum[v[1]]);  // we take the minimum subtree
+        sum2=sum[1]-sum1;                 // total sum - sum1 gives the weight of other subtree
+        int temp=(sum1*sum2)%mod;
+        ans=max(ans,temp);
+    }
+    return ans;
+}
