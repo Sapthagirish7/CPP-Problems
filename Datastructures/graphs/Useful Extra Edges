@@ -1,0 +1,64 @@
+Problem Description
+
+Given a graph of A nodes. Also given the weighted edges in the form of array B.
+
+You are also given starting point C and destination point D.
+
+Also given are some extra edges in the form of vector E.
+
+You need to find the length of the shortest path from C to D if you can use maximum one road from the given roads in E.
+
+All roads are one way ie they go from B[i][0] to B[i][1].
+
+
+
+
+#define pii pair<int,int>
+
+int dijkstras(int src, int dest, int n, vector<vector<pii>> &adj){
+    vector<int> dist(n+1, INT_MAX);
+    vector<bool> vis(n+1, false);
+    dist[src]=0;
+    priority_queue<pii, vector<pii>, greater<pii>> minHp;
+    minHp.push({0,src});
+    
+    while(!minHp.empty()){
+        pii p=minHp.top();
+        int u=p.second;
+        minHp.pop();
+        if(vis[u]) continue; // if it is already visited then continue , beacuse of the undirected edges.
+        vis[u]=true;
+        
+        for(auto child:adj[u]){         // same as normal Dijkstra algorithm 
+            int v=child.first;
+            int w=child.second;
+            if(dist[v]>dist[u]+w){
+                dist[v]=dist[u]+w;
+                minHp.push({dist[v], v}); 
+            }
+        }
+    }
+    return dist[dest];
+}
+
+int Solution::solve(int A, vector<vector<int> > &B, int C, int D, vector<vector<int> > &E) {
+    vector<vector<pii>> adj(A+1);
+    for(auto v:B){
+        adj[v[0]].push_back({v[1], v[2]});
+    }
+    
+    int ans=INT_MAX;
+    // take one edge at a time from E
+    for(auto v:E){
+        if(v[0]>A || v[1]>A) continue;
+        
+        adj[v[0]].push_back({v[1], v[2]}); //insert one edge to the graph and call fun for min distance
+        adj[v[1]].push_back({v[0], v[2]});
+        int temp=dijkstras(C,D,A,adj);
+        ans=min(ans, temp);
+        adj[v[0]].pop_back();
+        adj[v[1]].pop_back();
+        
+    }
+    return (ans==INT_MAX) ? -1 : ans;
+}
