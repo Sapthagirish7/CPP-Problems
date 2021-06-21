@@ -1,0 +1,57 @@
+//How many minimum numbers from fibonacci series are required such that sum of numbers should be equal to a given Number N?
+ 
+ Using Stack:
+ 
+ int cnt=0;
+void fun(stack<int>&st,int A){
+    if(A==0) return ;
+    while(st.top()>A){
+        st.pop();
+    }
+    int x=st.top();
+    cnt++;
+    fun(st,A-x);
+}
+
+int Solution::fibsum(int A) {
+    int a=1;
+    int b=1;
+    stack<int>st;
+    while(b<=A){
+       st.push(b);
+       int temp=b;
+       b=b+a;
+       a=temp;
+    }
+    cnt=0;
+    fun(st,A);
+    return cnt;
+}
+Using Dp:
+
+
+int Solution::fibsum(int A) {
+    vector<int>dp(50,1);
+    int i=2;
+    while(dp[i-1]<A){
+        dp[i]=dp[i-1]+dp[i-2];
+        i++;
+    }
+    queue<pair<int,int> >q;
+    q.push(make_pair(A,0));
+    while(!q.empty()){
+        pair<int,int>p = q.front();
+        int x = p.first;
+        int level = p.second;
+        if(x==0)return level;
+        q.pop();
+        for(int k=i-1;k>=1;k--){
+            if(x-dp[k]>=0)
+            {
+                 q.push(make_pair(x-dp[k],level+1));
+                 break;
+            }
+        }
+    }
+  return -1;
+}
