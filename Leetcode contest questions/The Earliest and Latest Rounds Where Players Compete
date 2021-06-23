@@ -1,0 +1,67 @@
+Hard Question
+//Using Recursion
+
+
+ int min_r=INT_MAX; int max_r=INT_MIN;
+    void dfs(int mask,int round,int i,int j,int f,int s){
+     if(i>=j){
+       dfs(mask,round+1,0,27,f,s); 
+     }
+     else if((mask & (1<<i))==0){
+       dfs(mask,round,i+1,j,f,s);
+     }
+     else if((mask & (1<<j))==0){
+       dfs(mask,round,i,j-1,f,s);
+      }
+     else if(i==f && j==s){
+          max_r=max(max_r,round);
+         min_r=min(min_r,round);
+     }
+         else{
+             if(i!=f && i!=s){
+              dfs(mask^(1<<i) ,round,i+1,j-1,f,s);
+             }
+             if(j!=f && j!=s){
+              dfs(mask^(1<<j) ,round,i+1,j-1,f,s);
+             }
+        }
+    
+    }
+    vector<int> earliestAndLatest(int n, int f, int s) {
+        int mask=(1<<n)-1;       //this equals 1111111111..... 'n' no of '1's,n=28 at max. 
+      dfs(mask,1,0,27,f-1,s-1);
+        return {min_r,max_r};
+    }
+    
+    
+    
+    
+//Using memoization
+
+ int min_r = INT_MAX, max_r = INT_MIN;
+bool visited[27][27][27] = {};
+void dfs(int mask, int round, int i, int j, int first, int second, int l, int m, int r) {
+    if (i >= j)
+        dfs(mask, round + 1, 0, 27, first, second, l, m, r);
+    else if ((mask & (1 << i)) == 0)
+        dfs(mask, round, i + 1, j, first, second, l, m, r);
+    else if ((mask & (1 << j)) == 0)
+        dfs(mask, round, i, j - 1, first, second, l, m, r);
+    else if (i == first && j == second) {
+        min_r = min(min_r, round);
+        max_r = max(max_r, round);
+    }
+    else if (!visited[l][m][r]) {
+        visited[l][m][r] = true;
+        if (i != first && i != second)
+            dfs(mask ^ (1 << i), round, i + 1, j - 1, first, second, 
+                l - (i < first), m - (i > first && i < second), r - (i > second));
+        if (j != first && j != second)
+            dfs(mask ^ (1 << j), round, i + 1, j - 1, first, second,
+                l - (j < first), m - (j > first && j < second), r - (j > second));
+    }
+}
+vector<int> earliestAndLatest(int n, int first, int second) {
+    dfs((1 << n) - 1, 1, 0, 27, first - 1, second - 1, first - 1, second - first - 1, n - second);
+    return { min_r, max_r };
+}
