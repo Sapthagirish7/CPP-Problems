@@ -1,0 +1,24 @@
+//Problem Description
+
+//Given a binary array A and a number B, we need to find length of the longest subsegment of ‘1’s possible by changing at most B ‘0’s.
+
+
+int Solution::solve(vector<int> &A, int B) {
+// take an example of arr[]={1,1,0,0,0,1,1,1,1,1} ,we need to use sliding window concept with window size of k.
+//so we count the no of zeros and if it exceeds the window size k , we reset the window size .while we are doing that we keep track of max no of
+// consecutive ones's.
+    int n=A.size();
+    int start=0, end=0, count=0;
+    int ans=INT_MIN;
+    for(int end=0;end<n;end++){
+        if(A[end]==0){
+            count++;   // counting no of zeros
+        }
+        while(count>B){
+            if(A[start]==0)count--;   // if count is greater than B we reset the eindow by reducing the count to 2 and reset the start pointer
+            start++;        
+        }
+        ans=max(ans, end-start+1);   // max count of 1's    
+    }
+    return ans;
+}
