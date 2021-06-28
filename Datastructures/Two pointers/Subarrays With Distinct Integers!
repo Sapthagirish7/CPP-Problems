@@ -1,0 +1,30 @@
+Problem Description
+
+Given an array A of positive integers,call a (contiguous,not necessarily distinct) subarray of A good if the number of different integers in that subarray is exactly B.
+
+(For example: [1, 2, 3, 1, 2] has 3 different integers 1, 2 and 3)
+
+Return the number of good subarrays of A.
+
+
+code:
+int Solution::solve(vector<int> &A, int B) {
+   unordered_map<int, int> m;
+int res = 0, j=0, prefix = 0, cnt=0;
+for(auto i = 0; i < A.size(); ++i) {
+    if (m[A[i]]++ == 0)    // for counting the distinct elements till now 
+        ++cnt;
+    if (cnt > B){       if cnt is greater than B we remove the first element included that is j.
+        --m[A[j++]];
+        --cnt;
+        prefix = 0;
+    }
+    while (m[A[j]] > 1){        // to count the the no of similar elements so that we can add that to tha ans.
+        ++prefix;        
+        --m[A[j++]];
+    }
+    if (cnt == B) 
+        res += prefix + 1;
+}
+return res;
+}
