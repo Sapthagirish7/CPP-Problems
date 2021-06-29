@@ -1,0 +1,31 @@
+Problem Description
+
+Given are Three arrays A, B and C.
+
+Return the sorted list of numbers that are present in atleast 2 out of the 3 arrays.
+
+
+
+code:
+vector<int> Solution::solve(vector<int> &A, vector<int> &B, vector<int> &C) {
+   int n1=A.size(); int n2=B.size(); int n3=C.size();
+   map<int,set<int>>mp;
+   int i=0,j=0,k=0;
+   vector<int>v;
+   // Here 1,2,3 are used for denoting that they are present in distinct arrays. we use set inorder to prevent duplicates from the same array.
+    while(i<n1 || j<n2 || k<n3){
+        if(i<n1) 
+          mp[A[i]].insert(1);
+        if(j<n2)
+          mp[B[j]].insert(2);
+        if(k<n3)
+          mp[C[k]].insert(3);
+        i++;j++;k++;
+    }
+    for(auto it:mp){
+        if(it.second.size()>=2){  
+            v.push_back(it.first);
+        }
+    }
+    return v;
+}
