@@ -1,0 +1,31 @@
+Problem Description
+
+Given an array of integers A and an integer B.
+
+Find the total number of subarrays having exactly B odd numbers.
+
+
+idea:
+Whenever we are asked to calculate no of subarrays with exact k no of items ,then we need to find (no of subarrays with atmost k items - no of subarrays with atmost k-1 items).
+this will give us the no of subarrays with exact k items.
+
+code:
+int helper(vector<int>&A,int B){
+    int cnt=0;int j=0; int ans=0;
+    for(int i=0;i<A.size();i++){
+        if(A[i]%2==1){
+            cnt++;
+        }
+        while(j<=i && cnt>B){
+            if(A[j]%2==1){
+                cnt--;
+            }
+            j++;
+        }
+        ans+=i-j+1;
+    }
+    return ans;
+}
+int Solution::solve(vector<int> &A, int B) {
+    return helper(A,B)-helper(A,B-1);
+}
