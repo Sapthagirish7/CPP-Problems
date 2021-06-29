@@ -32,3 +32,21 @@ int Solution::solve(string A) {
     }
     return 1;
 }
+
+Using unordered_set:
+int Solution::solve(string A) {
+    unordered_set<char> s;
+    for(int i=0;i<A.length();i++){
+        if(s.find(A[i])==s.end()){
+            s.insert(A[i]);
+        }
+        else{
+            s.erase(A[i]);
+        }
+    }
+    // cout<<s.size()<<endl;
+    if(s.size()<=1){
+        return 1;
+    }
+    return 0;
+}
