@@ -1,0 +1,23 @@
+Given an array of strings, return all groups of strings that are anagrams. 
+Represent a group by a list of integers representing the index in the original list. Look at the sample case for clarification.
+
+Input : cat dog god tca
+Output : [[1, 4], [2, 3]]
+
+
+//we have to sort the strings and store their index as vector in a map.
+// indexs in the vector are anagrams since they have same charecters and we can push those vectors into ans.
+code:
+vector<vector<int> > Solution::anagrams(const vector<string> &s) {
+          unordered_map<string,vector<int>>mp;
+          vector<vector<int>>v1;
+          for(int i=0;i<s.size();i++){
+              string a=s[i];
+              sort(a.begin(),a.end());
+              mp[a].push_back(i+1);
+          }
+          for(auto it:mp){
+             v1.push_back(it.second);
+          }
+          return v1;
+}
