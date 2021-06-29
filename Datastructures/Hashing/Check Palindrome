@@ -1,0 +1,34 @@
+Problem Description
+
+Given a string A consisting of lowercase characters.
+
+Check if characters of the given string can be rearranged to form a palindrome.
+
+Return 1 if it is possible to rearrange the characters of the string A such that it becomes a palindrome else return 0.
+
+code:
+
+
+int Solution::solve(string A) {
+    unordered_map<char,int>mp;
+    for(int i=0;i<A.size();i++){
+        mp[A[i]]++;
+    }
+    int cnt=0;
+    // Now I am checking for every charecter if it is even number the we can arrange them on both sides equally .
+    //if it is odd we can allow only one charecter so if cnt of odd num greater than 1 we should return 0. 
+    for(auto it:mp){
+        int n=it.second;
+        if(n%2==0) continue;
+        else if(n%2==1){
+            if(cnt==0){
+                cnt++;
+                continue;
+            }
+            else{
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
