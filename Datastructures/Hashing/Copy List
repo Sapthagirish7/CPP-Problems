@@ -1,0 +1,46 @@
+A linked list is given such that each node contains an additional random pointer which could point to any node in the list or NULL.
+
+Return a deep copy of the list.
+
+Example
+
+Given list
+
+   1 -> 2 -> 3
+with random pointers going from
+
+  1 -> 3
+  2 -> 1
+  3 -> 1
+You should return a deep copy of the list. 
+The returned answer should not contain the same node as the original list, but a copy of them. 
+The pointers in the returned list should not link to any node in the original input list.
+
+
+
+code:
+
+RandomListNode* Solution::copyRandomList(RandomListNode* head) {
+    map<RandomListNode*,RandomListNode*> mp;  
+        RandomListNode* A=head;
+        while(head)
+        { 
+            RandomListNode* temp= new RandomListNode(head->label);   // we create a new node same as original node.  
+            mp[head]=temp;              // then we map the original node to the newly created node
+            head=head->next;          // we move to the next pointer in the original node.
+            
+        }
+        head=A;   // Again we point head node to original head node.
+      
+        while(head)      // in this loop we traverse the original list and if there exist a next or random pointer we make it equal to next/random pointer of copy list.
+        {
+            
+            (head->next==NULL)?mp[head]->next=NULL: mp[head]->next=mp[head->next];      // copy->next=copy->next->next;
+             
+       (head->random==NULL)?mp[head]->random=NULL: mp[head]->random=mp[head->random];
+            
+           
+            head=head->next;
+        }
+return mp[A];
+}
