@@ -1,0 +1,29 @@
+Problem Description
+
+Given an array of integers A and an integer B.
+
+Find the total number of subarrays having bitwise XOR of all elements equals to B.
+
+idea:
+//we take prefix xor of array and while doing that if prefix_xor^target and if any subarry with that xor is found that means that 
+//if our cur subarray has two sub arrays x & y and our resultant xor is x,then it means y subarray has xor value of target.
+
+(cur_subArray)^target=x // where x subarray is the prefix subarray already found.
+(x^target)^target=>x; // thus we increase the ans by one.
+
+
+code:
+int Solution::solve(vector<int> &A, int B) {
+     map<int ,int>mp;
+     int Xor=0;
+     int ans=0;
+     for(auto it : A){
+         Xor=Xor^it;
+         if(Xor==B) ans++;
+         if(mp.find(Xor^B)!=mp.end()){
+             ans+=mp[Xor^B];
+         }
+         mp[Xor]++;
+     }
+     return ans;
+}
