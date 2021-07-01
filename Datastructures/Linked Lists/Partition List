@@ -1,0 +1,32 @@
+Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+For example,
+
+Given 1->4->3->2->5->2 and x = 3,
+
+return 1->2->2->4->3->5.
+
+
+code:
+ListNode* Solution::partition(ListNode* A, int B) {
+    if(!A || !A->next) return A;
+    ListNode dummy1(0);
+    ListNode dummy2(0);
+    ListNode* temp1=&dummy1; ListNode*temp2=&dummy2;
+    while(A){
+        if(A->val<B){
+            temp1->next=A;
+            temp1=temp1->next;
+        }
+        else{
+            temp2->next=A;
+            temp2=temp2->next;
+        }
+        A=A->next;
+    }
+    temp2->next=NULL;
+    temp1->next=dummy2.next;
+    return dummy1.next;
+}
