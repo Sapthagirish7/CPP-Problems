@@ -1,0 +1,24 @@
+listnode* insertionSortList(listnode* A) {
+    if(A->next==NULL)  return A;
+    listnode* curr=A;
+    listnode* sorted=NULL;
+    // we simply traverse through the elements first.
+    while(curr){
+        listnode* temp=curr;
+        if(!sorted || sorted->val>temp->val){    //check the current element with the sorted list head if it is less than sorted head then current element towards sorted head. 
+            temp->next=sorted;
+            sorted=temp;
+        } 
+        else{
+            listnode* s=sorted;
+            while(s->next && s->next->val<temp->val){  //if sorted head value is less than curr value then traverse through the sorted list until 
+                                                       // we get next pointer greater than cur element,and place it before that node.                                           
+                s=s->next;
+            }
+            temp->next=s->next;
+            s->next=temp;
+        }
+        curr=curr->next;
+    } 
+    return sorted;  
+}
