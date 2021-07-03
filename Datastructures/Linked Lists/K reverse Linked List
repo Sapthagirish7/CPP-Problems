@@ -44,3 +44,19 @@ ListNode* Solution::reverseList(ListNode* A, int B) {
      }
    return reversed;
 }
+
+
+Method-2:
+ ListNode *curr = A, *prev = NULL, *next = NULL;
+    int cnt =0;
+     while(cnt<B && curr) {
+         next = curr->next;
+         curr->next = prev;
+         prev = curr;
+         curr = next;
+         cnt++;
+     }
+     if(next) {
+         A->next = reverseList(next, B);
+     }
+     return prev;
