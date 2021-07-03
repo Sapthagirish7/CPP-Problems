@@ -1,0 +1,60 @@
+Given a list, rotate the list to the right by k places, where k is non-negative.
+
+For example:
+
+Given 1->2->3->4->5->NULL and k = 2,
+return 4->5->1->2->3->NULL.
+
+Method-1:
+listnode* rotateRight(listnode* head, int B) {
+    if (head == NULL || head->next == NULL) return head;
+
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+
+        ListNode *fast = dummy, *slow = dummy;
+
+        int sizeOfList = 0; 
+        while (fast->next != NULL) {
+            fast = fast->next;
+            sizeOfList++;
+        }
+
+        int firstNodePos = sizeOfList - (k % sizeOfList);
+        for (int i = 0; i < firstNodePos; i++) {
+            slow = slow->next;
+        }
+
+        fast->next = dummy->next;
+        dummy->next = slow->next; 
+        slow->next = NULL;
+
+        return dummy->next;
+}
+
+code-2:
+int len = 0; // Find length first
+    listnode* ptr = A;
+    while(ptr){
+        len++;
+        ptr = ptr->next;
+    }
+    B = B%len;
+    if(B == 0) return A;
+    len -= B; // Find position of node that would become our new node
+    ptr = A;
+    while(len>1){
+        ptr = ptr->next;
+        len--;
+    }
+    
+    listnode* curr = ptr->next;
+    ptr->next = NULL;
+    listnode* head = curr;
+    //Go up to the last node
+    while(curr->next){
+        curr = curr->next;
+    }
+    curr->next = A; // and make its next as our original head
+    return head;
+    }
