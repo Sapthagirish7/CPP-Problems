@@ -1,0 +1,39 @@
+Given a linked list A of length N and an integer B.
+
+You need to reverse every alternate B nodes in the linked list A.
+A = 3 -> 4 -> 7 -> 5 -> 6 -> 6 -> 15 -> 61 -> 16
+ B = 3
+ 
+  7 -> 4 -> 3 -> 5 -> 6 -> 6 -> 16 -> 61 -> 15
+  
+  Method-1 (Using recursion)
+  code:
+  ListNode* Solution::solve(ListNode* A, int B) {
+    if(A==NULL) return A;
+    ListNode* head;
+    ListNode* temp=A;
+    int cnt=0; ListNode* prev=NULL;
+    // if B is 3 then we are reversing the list upto 7 in the ex and making 7 as head,then for the next k nodes we are jyust traversing .
+    while(cnt<B && temp->next){
+        ListNode* cur=temp->next;
+        temp->next=prev;
+        prev=temp;
+        temp=cur;
+        cnt++;
+    }
+    // At the end of the list when nodes are less than k we are making the last node pointing to its prev node and the returning it.
+    if(cnt!=B) {
+        temp->next=prev;
+        return temp;
+    }
+    head=prev;
+    A->next=temp;
+    cnt=1;
+    while(cnt<B && temp->next){
+        temp=temp->next;
+        cnt++;
+    }
+    temp->next=solve(temp->next,B);  // adding the next pointer of end of temp to the next newly reversed head list.
+    return head;
+    }
+}
