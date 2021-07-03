@@ -1,0 +1,33 @@
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+return 1->4->3->2->5->NULL.
+
+
+code:
+listnode* reverseBetween(listnode* A, int B, int C) {
+   listnode* prev=NULL;
+    listnode* temp=A; int cnt=1;
+    // we traverse the temp pointer upto the B pos.
+    while(cnt<B){
+        prev=temp;
+        temp=temp->next;
+        cnt++;
+    }
+    listnode* s=temp; //pos B.
+    listnode* pre=NULL;  
+    while(cnt<C+1){         // Reversing the the nodes from B to C.
+        listnode* cur=temp->next;
+        temp->next=pre;
+        pre=temp;
+        temp=cur;
+        cnt++;
+    }
+    if(prev)  prev->next=pre;  // corner case when C is 1 ,then prev is NULL so we skip at that time.
+    
+    s->next=temp;   // B position is the ending after reversing so we add it to the
+                    //C+1 position
+  return prev==NULL?pre:A;  // if prev=NULL we need to return the C positon as the head as the head will change in that case.
+}
