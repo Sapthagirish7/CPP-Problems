@@ -1,0 +1,19 @@
+ListNode* Solution::mergeTwoLists(ListNode* A, ListNode* B) {
+    ListNode* dummy=new ListNode(0);
+    ListNode* sorted=dummy;
+    while(A && B){
+        if(A->val<=B->val){
+            sorted->next=A;
+            A=A->next;
+            sorted=sorted->next;
+        }
+        else{
+           sorted->next=B;
+           B=B->next;
+           sorted=sorted->next;
+        }
+    }
+    if(A) sorted->next=A;
+    else   sorted->next=B;
+    return dummy->next; 
+}
