@@ -1,0 +1,25 @@
+https://leetcode.com/contest/weekly-contest-248/problems/count-good-numbers/
+
+
+
+code:
+ long long helper(long long x,long long n,int mod){
+        if(n==0) return 1;
+        if(n%2==0){
+          return  helper(((x%mod)*(x%mod))%mod,n/2,mod)%mod;
+        }
+        else{
+            return ((x%mod)*helper(((x%mod)*(x%mod))%mod,n/2,mod))%mod;
+        }
+    }
+    int countGoodNumbers(long long n) {
+        int mod=1e9+7;
+        long long ans;
+        if(n%2==0){
+         ans= ((helper(4,n/2,mod)%mod)*(helper(5,n/2,mod)%mod))%mod;
+        }
+        else{
+         ans=(5*(helper(4,n/2,mod)%mod)*(helper(5,n/2,mod)%mod))%mod;
+        }
+        return ans;
+    }
