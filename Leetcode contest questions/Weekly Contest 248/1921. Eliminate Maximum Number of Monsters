@@ -1,0 +1,29 @@
+https://leetcode.com/contest/weekly-contest-248/problems/eliminate-maximum-number-of-monsters/
+
+
+Approach:
+We first compute how many minutes each monster needs to reach the city, based on the initial position and speed.
+
+Then, we sort our monsters by their arrival time.
+
+I tried to use min heap (second solution below), but, even with the bulk insert, it was slower than sorting (154 vs 116 ms).
+
+Finally, we shoot monsters (in the arrival order), until a monster arrives earlier than we can make our next shot. For example, if we have made 5 shots, and the next monster arrives in 4 minutes, we lose.
+
+
+code:
+int eliminateMaximum(vector<int>& dist, vector<int>& speed) {
+        int n=dist.size();
+        for(int i=0;i<n;i++){
+            dist[i]=(dist[i]/speed[i])-(dist[i]%speed[i]==0);
+        }
+        sort(dist.begin(),dist.end());
+        int ans=0;
+        for(int i=0;i<n;i++){
+            if(dist[i]>=ans){
+              ans++;
+            }
+            else break;
+        }
+        return ans;
+    }
