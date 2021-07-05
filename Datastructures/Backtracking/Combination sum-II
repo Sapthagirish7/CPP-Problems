@@ -1,0 +1,30 @@
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+Each number in C may only be used once in the combination.
+
+
+code:
+
+void combinationFun(const vector<int>&A,vector<int>&temp,int start,int end,int target,set<vector<int>>&ans){
+    if(target<0) return;
+    if(target==0){
+      ans.insert(temp);
+      return;
+    }
+    if(start>end) return;
+    temp.push_back(A[start]);
+    combinationFun(A,temp,start+1,end,target-A[start],ans);
+    temp.pop_back();
+    combinationFun(A,temp,start+1,end,target,ans);
+}
+vector<vector<int> > Solution::combinationSum(vector<int> &A, int B) {
+    int n=A.size();
+    sort(A.begin(),A.end());
+    vector<vector<int>>ans;
+    set<vector<int>>st;
+    vector<int>temp;
+    combinationFun(A,temp,0,n-1,B,st);
+     for(auto it:st)  
+         ans.push_back(it);
+    return ans;
+}
