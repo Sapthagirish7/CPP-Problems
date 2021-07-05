@@ -1,0 +1,29 @@
+iven two integers n and k, return all possible combinations of k numbers out of 1 2 3 ... n.
+
+Make sure the combinations are sorted.
+
+To elaborate,
+
+Within every entry, elements should be sorted. [1, 4] is a valid entry while [4, 1] is not.
+Entries should be sorted within themselves.
+
+code:
+void helper(int n,int i,int k,vector<vector<int>>&ans,vector<int>&temp){
+    if(k==0){
+        ans.push_back(temp);
+        return;
+    }
+    if(i>n) return;
+
+    for(int j=i;j<=n;j++){
+        temp.push_back(j);
+        helper(n,j+1,k-1,ans,temp);
+        temp.pop_back();
+    }
+}
+vector<vector<int> > Solution::combine(int A, int B) {
+    vector<vector<int>>ans;
+    vector<int>temp;
+    helper(A,1,B,ans,temp);
+    return ans;
+}
