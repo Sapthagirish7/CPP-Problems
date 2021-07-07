@@ -1,0 +1,97 @@
+Given a string A, we may represent it as a binary tree by partitioning it to two non-empty substrings recursively.
+
+Below is one possible representation of A = “great”:
+
+
+    great
+   /    \
+  gr    eat
+ / \    /  \
+g   r  e   at
+           / \
+          a   t
+ 
+To scramble the string, we may choose any non-leaf node and swap its two children.
+
+For example, if we choose the node “gr” and swap its two children, it produces a scrambled string “rgeat”.
+
+    rgeat
+   /    \
+  rg    eat
+ / \    /  \
+r   g  e   at
+           / \
+          a   t
+We say that “rgeat” is a scrambled string of “great”.
+
+Similarly, if we continue to swap the children of nodes “eat” and “at”, it produces a scrambled string “rgtae”.
+
+    rgtae
+   /    \
+  rg    tae
+ / \    /  \
+r   g  ta  e
+       / \
+      t   a
+We say that “rgtae” is a scrambled string of “great”.
+
+
+
+
+Memoization:
+unordered_map<string,bool>mp;
+bool helper(string a,string b){
+    int n=a.size();
+    string s=a+" "+b;
+    if(a==b) return true;
+    if(mp.find(s)!=mp.end()) return mp[s];
+    for(int len=1;len<n;len++){
+        bool cond1=false;
+        bool cond2=false;
+        if(helper(a.substr(0,len),b.substr(0,len))  && 
+              helper(a.substr(len,n-len),b.substr(len,n-len))){
+            cond1=true;
+        }
+        if(helper(a.substr(0,len),b.substr(n-len,len)) && 
+              helper(a.substr(len,n-len),b.substr(0,n-len))){
+            cond2=true;
+        }
+        if(cond1||cond2){
+            mp[s]=true;
+        }
+    }
+    return mp[s];
+}
+int Solution::isScramble(const string A, const string B) {
+    return helper(A,B);
+}
+
+
+Top-Down Approach:
+
+int Solution::isScramble(const string str1, const string str2) {
+int n = str1.size();
+if(n == 0)
+    return true;
+else
+    if(n == 1)
+        return str1 == str2;
+bool dp[n+1][n][n];
+for(int i = 0 ; i < n ; i++)
+    for(int j = 0 ; j < n ; j++)
+        dp[1][i][j] = (str1[i] == str2[j]);
+
+for(int len = 2 ; len <= n ; len++){
+    for(int i = 0 ; i <= n-len ; i++){
+        for(int j = 0 ; j <= n-len ; j++){
+            dp[len][i][j] = false;
+            for(int k = 1 ; k < len && dp[len][i][j] == false ; k++){
+                dp[len][i][j] = dp[len][i][j] || ( dp[k][i][j] && dp[len-k][i+k][j+k] );
+                dp[len][i][j] = dp[len][i][j] || ( dp[k][i][j+len-k] && dp[len-k][i+k][j] );
+            } 
+        }
+    }
+}
+return dp[n][0][0];
+}
+
