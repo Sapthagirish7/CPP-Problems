@@ -1,0 +1,31 @@
+Problem Description
+
+Given a string A, find length of the longest repeating sub-sequence such that the two subsequence don’t have same string character at same position,
+
+i.e., any i’th character in the two subsequences shouldn’t have the same index in the original string.
+
+NOTE: Sub-sequence length should be greater than or equal to 2.
+
+
+Top-Down Aprroach:
+int helper(string text1, string text2){
+       int n1=text1.size();
+        int n2=text2.size();
+        vector<vector<int>> dp(n1+1,vector<int>(n2+1,0));
+        for(int i=1;i<=n1;i++){
+            for(int j=1;j<=n2;j++){
+                if(text1[i-1]==text2[j-1] && i-1!=j-1){
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j]= max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return dp[n1][n2];
+    }
+int Solution::anytwo(string A) {
+    int n=A.size();
+    
+   return helper(A,A)>1? 1: 0;
+}
