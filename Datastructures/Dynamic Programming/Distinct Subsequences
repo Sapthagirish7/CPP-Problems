@@ -1,0 +1,40 @@
+Given two sequences A, B, count number of unique ways in sequence A, to form a subsequence that is identical to the sequence B.
+
+Subsequence : A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, “ACE” is a subsequence of “ABCDE” while “AEC” is not).
+
+Input 2:
+    A = "rabbbit" 
+    B = "rabbit"
+
+Output 2:
+    3
+    
+    code:
+    int solveLCS(string A,string B){
+int n = A.size(),m = B.size();
+vector<vector<int>> t(n+1,vector<int>(m+1));
+// fill(t.begin(),t.end(),vector(m+1,0));
+
+for(int j=0; j<m+1; j++){
+    t[0][j] = 0;
+}
+for(int i=0; i<n+1; i++){
+    t[i][0] = 1;//"abc" and "",there is one way
+}
+for(int i=1; i<n+1; i++){
+    for(int j=1; j<m+1; j++){
+        if(A[i-1] == B[j-1]){
+            t[i][j] = t[i-1][j-1]+t[i-1][j];//even after match 
+            //rabbitt
+            //rabbit
+        }
+        else{
+            t[i][j] = t[i-1][j];
+        }
+    }
+}
+return t[n][m];//no of ways
+}
+int Solution::numDistinct(string A, string B) {
+    return solveLCS(A,B);
+}
