@@ -1,0 +1,44 @@
+Problem Description
+
+Given a string A, find the common palindromic sequence ( A sequence which does not need to be contiguous and is a pallindrome), which is common in itself.
+
+You need to return the length of longest palindromic subsequence in A.
+
+Memoization -O(n^2):
+int longestPalindromeSubseq(string s) {
+        int n = s.size();
+        vector<vector<int>> mem(n,vector<int>(n));
+        return longestPalindromeSubseq(0,n-1, s,mem); 
+    }
+    int longestPalindromeSubseq(int l, int r, string &s, vector<vector<int>>& mem) {
+        if(l==r) return 1;
+        if(l>r) return 0;
+        if(mem[l][r]) return mem[l][r];
+        return mem[l][r] = s[l]==s[r] ? 2 + longestPalindromeSubseq(l+1,r-1, s,mem) : 
+            max(longestPalindromeSubseq(l+1,r, s,mem),longestPalindromeSubseq(l,r-1, s,mem)); 
+        
+    }
+
+//You can simply reverse the string and check the longest common subsequence.
+
+Top-Down Aprroach:
+int helper(string& A,string& B,int n){
+    vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(A[i-1]==B[j-1]){
+                dp[i][j]=1+dp[i-1][j-1];
+            }
+            else{
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    return dp[n][n];
+}
+int Solution::solve(string A) {
+    int n=A.size();
+    string B=A;
+    reverse(B.begin(),B.end());
+    return helper(A,B,n);
+}
