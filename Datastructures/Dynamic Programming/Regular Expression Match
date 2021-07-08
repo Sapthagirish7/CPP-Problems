@@ -19,7 +19,7 @@ int Solution::isMatch(const string A, const string B) {
                 dp[i][j] = dp[i-1][j-1];
             }
             else if(B[j-1] == '*'){
-                dp[i][j] = (dp[i-1][j] || dp[i][j-1]);
+                dp[i][j] = (dp[i-1][j] || dp[i][j-1]);  // in this case we check if the previous expressions are true or nor.
             }
             else{
                 dp[i][j] = false;
@@ -52,10 +52,11 @@ int Solution::isMatch(const string A, const string B) {
             if(A[i-1] == B[j-1] || B[j-1] == '.'){
                 dp[i][j] = dp[i-1][j-1];
             }
-            else if(B[j-1] == '*'){
+            else if(B[j-1] == '*'){   // we will check for Zero occurences of preceeding element and we also check if the element matches with the preceeding element whether it is 
+                                                // regual expression or not.
                 dp[i][j] = dp[i][j-2];
                 if(B[j-2]=='.' ||A[i-1]==B[j-2]){
-                    dp[i][j]=dp[i][j] | dp[i-1][j];
+                    dp[i][j]=dp[i][j] | dp[i-1][j]; 
                 }
             }
             else{
