@@ -1,0 +1,39 @@
+Problem Description
+
+Given a binary grid A of size N x M consisting of 0's and 1's, find the area of the largest rectangle inside the grid such that all the cells inside the chosen rectangle should have 1 in them.
+
+You are allowed to permutate the columns matrix i.e. you can arrange each of the column in any order in the final grid.
+
+Please follow the sample input and explanation for more clarity.
+
+Idea:
+//we need to start from 2nd row and if(A[i]==1) then add the value of the above cell A[i][j]+=A[i-1][j].
+//after doing this for all rows now take the seperately and sort them in decresing order.
+//Now we can calculate the maxArea by adding the values of cells untill we get zeros.
+
+code:
+int maxarea(vector<int> b){
+    int p=0;
+    for(int i=0; i<b.size(); i++){  //Now we can calculate the maxArea by adding the values of cells untill we get zeros.
+        int y=(i+1)*b[i];
+        p=max(p,y);
+    }return p;
+}
+
+int Solution::solve(vector<vector<int> > &A) {
+    for(int i=1; i<A.size(); i++){       ////we need to start from 2nd row and if(A[i]==1) then add the value of the above cell A[i][j]+=A[i-1][j].
+        for(int j=0; j<A[i].size(); j++){
+           if( A[i][j]!=0) A[i][j]+=A[i-1][j];
+            
+        }
+    }
+    vector<int> b;
+    int k=0;                                                                                                            
+    for(int i=0; i<A.size(); i++){
+        b=A[i];    
+        sort(b.begin(),b.end(),greater<int>());    //after doing this for all rows now take the seperately and sort them in decresing order.
+        int p=maxarea(b);
+        k=max(p, k);
+    }
+    return k;
+}
