@@ -1,0 +1,36 @@
+Given A, B, C, find whether C is formed by the interleaving of A and B.
+Input 1:
+    A = "aabcc"
+    B = "dbbca"
+    C = "aadbbcbcac"
+
+Output 1:
+    1
+    
+ Idea :
+ we have to check if the lcs of A & C is equal to size of A and also check if the lcs of B&C is equal to the size of C. Then check if size of C is equal to the sum of lcs1+lcs2.
+ 
+ code:
+ int helper(string text1, string text2){
+       int n1=text1.size();
+        int n2=text2.size();
+        vector<vector<int>> dp(n1+1,vector<int>(n2+1,0));
+        for(int i=1;i<=n1;i++){
+            for(int j=1;j<=n2;j++){
+                if(text1[i-1]==text2[j-1]){
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j]= max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return dp[n1][n2];
+    }
+int Solution::isInterleave(string A, string B, string C) {
+     int n1=A.size(); int n2=B.size(); int n3=C.size();
+    int lcs1=helper(A,C);
+    int lcs2=helper(B,C);
+    if(lcs1==n1 && lcs2==n2 && lcs1+lcs2==n3) return 1;
+    return 0;
+}
