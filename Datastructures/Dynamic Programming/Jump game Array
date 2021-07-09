@@ -1,0 +1,26 @@
+Given an array of non-negative integers, A, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+code:
+int helper(vector<int>&A,int i,int n,vector<int>&dp){
+    if(i>=n-1){
+        return 1;
+    }
+    if(dp[i]!=-1) return dp[i];
+    if(A[i]==0) return dp[i]=0;
+    for(int j=1;j<=A[i];j++){
+        if(helper(A,i+j,n,dp)){
+            return dp[i]=1;
+        }
+        dp[i]=0;
+    }
+    return dp[i];
+}
+int Solution::canJump(vector<int> &A) {
+    int n=A.size();
+    vector<int>dp(n,-1);
+    return helper(A,0,n,dp);
+}
