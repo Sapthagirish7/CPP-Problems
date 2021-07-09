@@ -1,0 +1,30 @@
+Given a number A, return number of ways you can draw A chords in a circle with 2 x A points such that no 2 chords intersect.
+
+Two ways are different if there exists a chord which is present in one way and not in other.
+
+Return the answer modulo 109 + 7.
+
+
+idea:
+Catalan numbers of n is the no of chords that can be formed in the circle.
+c[0]=c[1]=1;
+c[2]=c0c1+c1c0;
+c[3]=c0c2+c1c1+c2c0
+also 
+interms of binomial 
+c[n]=2nCn/(n+1)
+
+code:
+int Solution::chordCnt(int A) {
+    long long int m = 1000000007;
+     long long int dp[A+1];
+     dp[0] = 1;
+    for(long long int i=1;i<=A;i++){
+         dp[i] = 0;
+      for(long long int j=1;j<=i;j++){
+          long long int temp = (dp[j-1]%m * dp[i-j]%m)%m;
+          dp[i] = (dp[i]%m+temp%m)%m;
+      }
+   }
+ return (dp[A]+m)%m;
+}
