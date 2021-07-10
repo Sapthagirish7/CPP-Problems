@@ -1,0 +1,24 @@
+
+
+code:
+int Solution::solve(const vector<int> &A) {
+    if(A.size()<=2) return A.size();
+    vector<unordered_map<int,int>>dif(A.size());
+    int ans=2;
+    for(int i=1;i<A.size();i++){
+        for(int j=0;j<i;j++){
+            int d=A[i]-A[j];
+            if(dif[j].find(d)!=dif[j].end()){
+                // we've already seen this difference for A[j],
+            // so the length of AP at i with this difference is 
+            // length of AP at j + 1
+                dif[i][d]=dif[j][d]+1;
+                ans=max(ans,dif[i][d]);
+            }
+            else{
+                dif[i][d]=2;
+            }
+        }
+    }
+    return ans;
+}
