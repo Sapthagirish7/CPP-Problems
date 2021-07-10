@@ -1,0 +1,27 @@
+Given an array of non-negative integers, A, of length N, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Return the minimum number of jumps required to reach the last index.
+
+If it is not possible to reach the last index, return -1.
+
+
+
+code:
+int Solution::jump(vector<int> &A) {
+   int n=A.size();
+    if(n==1||n==0)return 0;
+    for(int i=0;i<n;i++)
+        A[i]+=i;         // First we will be adding upto which index we can reach.
+    int max1=A[0],end=A[0],i=0,ans=1;  // max is upto A[0]  initially.
+    while(i<=end){        
+        if(end>=n-1)return ans;  // if we hav reached the last index we return the min index.
+        max1=max(A[i],max1);     // we select the the index which has max length within A[0].
+        if(i==end){
+            end=max1,ans++;     // after reaching A[0] we change next setination to max and increasing the ans.
+        }
+        i++;
+    }
+    return -1;
+}
