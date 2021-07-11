@@ -1,0 +1,16 @@
+Given a 3 x A board,  find the number of ways to color it using at most 4 colors such that no 2 adjacent boxes have same color.
+
+Diagonal neighbors are not treated as adjacent boxes.
+
+Return the ways modulo 109 + 7 as the answer grows quickly.
+code:
+int Solution::solve(int A) {
+    long long int mod=1e9+7;
+    int x=12;int y=24;
+    for(int i=2;i<=A;i++){
+        int new_x=(7*x + 5*y)%mod;
+        int new_y=(10*x + 11*y)%mod;
+        x=new_x; y=new_y;
+    }
+    return (x+y)%mod;
+}
