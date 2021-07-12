@@ -1,0 +1,83 @@
+//We can find all adjacent valley/peak pairs and calculate the profits easily. 
+//Instead of accumulating all these profits like Buy&Sell Stock II, we need the highest k ones.
+
+//The key point is when there are two v/p pairs (v1, p1) and (v2, p2), satisfying v1 <= v2 and p1 <= p2,
+//we can either make one transaction at [v1, p2], or make two at both [v1, p1] and [v2, p2]. The trick is to treat [v1, p2] as the first transaction,
+//and [v2, p1] as the second. Then we can guarantee the right max profits in both situations, p2 - v1 for one transaction and p1 - v1 + p2 - v2 for two.
+
+//Finding all v/p pairs and calculating the profits takes O(n) since there are up to n/2 such pairs. And extracting k maximums from the heap consumes another O(klgn).
+
+Approach 1:
+int maxProfit(int k, vector<int> &prices) {
+        int n = (int)prices.size(), ret = 0, v, p = 0;
+        priority_queue<int> profits;
+        stack<pair<int, int> > vp_pairs;
+        while (p < n) {
+            // find next valley/peak pair
+            for (v = p; v < n - 1 && prices[v] >= prices[v+1]; v++);
+            for (p = v + 1; p < n && prices[p] >= prices[p-1]; p++);
+            // save profit of 1 transaction at last v/p pair, if current v is lower than last v
+            while (!vp_pairs.empty() && prices[v] < prices[vp_pairs.top().first]) {
+                profits.push(prices[vp_pairs.top().second-1] - prices[vp_pairs.top().first]);
+                vp_pairs.pop();
+            }
+            // save profit difference between 1 transaction (last v and current p) and 2 transactions (last v/p + current v/p),
+            // if current v is higher than last v and current p is higher than last p
+            while (!vp_pairs.empty() && prices[p-1] >= prices[vp_pairs.top().second-1]) {
+                profits.push(prices[vp_pairs.top().second-1] - prices[v]);
+                v = vp_pairs.top().first;
+                vp_pairs.pop();
+            }
+            vp_pairs.push(pair<int, int>(v, p));
+        }
+        // save profits of the rest v/p pairs
+        while (!vp_pairs.empty()) {
+            profits.push(prices[vp_pairs.top().second-1] - prices[vp_pairs.top().first]);
+            vp_pairs.pop();
+        }
+        // sum up first k highest profits
+        for (int i = 0; i < k && !profits.empty(); i++) {
+            ret += profits.top();
+            profits.pop();
+        }
+        return ret;
+    }
+    Time complexity:O(n+klogn)// n for traversin through the array and klogn for storing the k elements in the minh.
+    
+    Simple approach using dp:
+    int n = a.size();
+//case 1  // when only one stock is there or no transaction possible.
+if(b==0 || n<=1)
+return 0;
+
+//case2  // we can make any transaction if it is positive
+int profit = 0;
+if(2*b>n ){
+    for(int i=0; i<a.size()-1; i++)
+        if(a[i+1]>a[i])
+            profit = profit+a[i+1] - a[i];
+    return profit;
+}
+
+//case 3
+int dp[2*b+1];
+dp[0]= -a[0];
+
+for(int i=1; i<2*b; i++){
+    if(i%2==0)    // we keep inf in cases of buying states
+        dp[i]=INT_MIN;
+    else dp[i]=0;  //we keep 0 as the min profit.
+}
+// simply we are making 2b size states containing busy at even pos and sell at odd pos.
+//these pos will bw occupied by the more profitable transactions.
+for(int i=0; i<n;i++){
+    for(int j=0; j<2*b; j++){
+        if(j==0)
+            dp[j]= max(dp[j]/*int_min*/, 0-a[i]); // for buying initially
+        else if(j%2==0) //buy  // we buy when the cost is better than prev buy
+            dp[j]= max(dp[j], dp[j-1]-a[i]);
+        else            //sell  
+            dp[j]= max(dp[j], dp[j-1]+a[i]); //we sell here if the profit is better than prev profit.
+    }
+}
+return dp[2*b-1]; //last sell state
