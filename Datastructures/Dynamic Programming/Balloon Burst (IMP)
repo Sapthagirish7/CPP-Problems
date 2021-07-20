@@ -1,0 +1,37 @@
+You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
+
+If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+
+Return the maximum coins you can collect by bursting the balloons wisely.
+
+ code:
+  int maxCoins(vector<int>& nums) {
+        int n = nums.size();
+    // corner case
+		if(n == 0) return 0;
+		
+		int newNums[n + 2]; // expand nums
+		for(int i = 0; i < n; i++) newNums[i + 1] = nums[i];
+		newNums[0] = 1;
+		newNums[n + 1] = 1;
+		
+		// M[i, j] represents the max coins we can get for index i to j, i.e. nums[i : j] 
+		int M[n + 2][n + 2];
+        memset(M,0,sizeof(M));
+		// induction rule
+		// assume we keep nums[k] as the last to burst, then 
+		// M[i][j](j >= i) = Math.max(M[i][j], M[i][k - 1] + nums[i-1]*nums[k]*nums[j + 1] + M[k + 1][j])
+	 
+		// define the sub-problem size by the length l, we solve the all the sub-problems M[i][i + l - 1] where i varies
+		for(int l = 1; l <= n; l++){
+			// with fixed length l, i + l can not larger than n, i.e. i + l - 1 <= n, thus we have i <= n - l + 1
+			for(int i = 1; i <= n - l + 1; i++){
+				int j = i + l - 1;
+				for(int k = i; k <= j; k++){
+					M[i][j] = max(M[i][j], M[i][k - 1] + newNums[i - 1]*newNums[k]*newNums[j + 1] + M[k + 1][j]);
+				}
+			}
+		}
+		
+		return M[1][n];
+	}
